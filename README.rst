@@ -6,10 +6,10 @@ Introduction
 ------------
 
 alw_ is the easiest way to get your hands on the functionality offered by the
-OpenAL API.
+OpenAL_ API.
 
-Its main part is a simple alw_gen.py_ Python script that generates alw.h and alw.c
-from the OpenAL headers (al.h and alc.h).
+Its main part is a simple alw_gen.py_ Python script that generates alw.h_ and alw.c_
+from the `OpenAL headers`_ (al.h and alc.h).
 Those files can then be added and linked (statically or dynamically) into your
 project.
 
@@ -87,7 +87,7 @@ Credits
 -------
 
 Slavomir Kaslev <slavomir.kaslev@gmail.com>
-    gl3w, which alw is based on
+    gl3w_, which alw is based on
 
 Niklas F. Pluem <niklas.crossedwires@gmail.com>
     Implementation
@@ -95,13 +95,12 @@ Niklas F. Pluem <niklas.crossedwires@gmail.com>
 Copyright
 ---------
 
-OpenAL is a trademark of Creative Labs, Inc.
+OpenAL is a trademark of `Creative Labs`_, Inc.
 
 .. _alw: https://github.com/kwertz/alw
 .. _alw_gen.py: https://github.com/kwertz/alw/blob/master/alw_gen.py
 .. _gl3w: https://github.com/skaslev/gl3w
-.. _gl3w_gen.py: https://github.com/skaslev/gl3w/blob/master/gl3w_gen.py
 .. _OpenAL headers: https://github.com/kcat/openal-soft/blob/master/include/AL
 .. _OpenAL: http://www.openal.org/
-.. _Creative Technologies: http://www.creative.com/
+.. _Creative Labs: http://www.creative.com/
 .. _Loki Software: http://www.lokigames.com/
