@@ -8,7 +8,7 @@ Introduction
 alw_ is the easiest way to get your hands on the functionality offered by the
 OpenAL_ API.
 
-Its main part is a simple alw_gen.py_ Python script that generates alw.h_ and alw.c_
+Its main part is a simple alw_gen.py_ Python script that generates alw.h and alw.c
 from the `OpenAL headers`_ (al.h and alc.h).
 Those files can then be added and linked (statically or dynamically) into your
 project.
