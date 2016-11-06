@@ -5,11 +5,11 @@ alw: Simple dynamic loader for OpenAL
 Introduction
 ------------
 
-gl3w_ is the easiest way to get your hands on the functionality offered by the
-OpenGL core profile specification.
+alw_ is the easiest way to get your hands on the functionality offered by the
+OpenAL API.
 
-Its main part is a simple gl3w_gen.py_ Python script that downloads the
-Khronos_ supported glcorearb.h_ header and generates gl3w.h and gl3w.c from it.
+Its main part is a simple alw_gen.py_ Python script that generates alw.h and alw.c
+from the OpenAL headers (al.h and alc.h).
 Those files can then be added and linked (statically or dynamically) into your
 project.
 
