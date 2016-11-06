@@ -16,7 +16,7 @@ project.
 Requirements
 ------------
 
-alw_gen.py_ requires Python version 2.6 or newer, with SSL support.
+alw_gen.py_ requires Python version 2.6 or newer.
 It is also compatible with Python 3.x.
 
 Example
