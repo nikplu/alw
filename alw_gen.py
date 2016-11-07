@@ -220,7 +220,7 @@ int alwInit(void)
 {
 	int res = open_libal();
 	if (res) load_procs();
-	return res;
+	return res ? 0 : -1;
 }
 
 void alwTerminate(void)
