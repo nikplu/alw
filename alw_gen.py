@@ -73,23 +73,28 @@ if not os.path.exists('include/AL'):
 if not os.path.exists('src'):
     os.makedirs('src')
 
-# Parse function names from alc.h and al.h
+# Parse function names from alc.h, al.h and efx.h
 procs = []
+efxProcs = []
 
-def parse_func_names(header, p):
+def parse_func_names(procs_, header, p):
     with open(header, 'r') as f:
         for line in f:
             m = p.match(line)
             if m:
-                procs.append(m.group(1))
+                procs_.append(m.group(1))
 
 print('Parsing alc.h header...')
-parse_func_names('include/AL/alc.h', re.compile(r'ALC_API.*ALC_APIENTRY\s+(\w+)'))
+parse_func_names(procs, 'include/AL/alc.h', re.compile(r'ALC_API.*ALC_APIENTRY\s+(\w+)'))
 
 print('Parsing al.h header...')
-parse_func_names('include/AL/al.h', re.compile(r'AL_API.*AL_APIENTRY\s+(\w+)'))
+parse_func_names(procs, 'include/AL/al.h', re.compile(r'AL_API.*AL_APIENTRY\s+(\w+)'))
+
+print('Parsing efx.h header...')
+parse_func_names(efxProcs, 'include/AL/efx.h', re.compile(r'AL_API.*AL_APIENTRY\s+(\w+)'))
 
 procs.sort()
+efxProcs.sort()
 
 def proc_t(proc):
     return { 'p': proc,
@@ -106,6 +111,7 @@ with open('include/AL/alw.h', 'wb') as f:
 #include <AL/alc.h>
 #define AL_NO_PROTOTYPES
 #include <AL/al.h>
+#include <AL/efx.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -115,8 +121,8 @@ typedef void (*ALWalproc)(void);
 
 /* alw api */
 int alwInit(void);
+int alwInitEfx(void);
 void alwTerminate(void);
-ALWalproc alwGetProcAddr(const char *proc);
 
 /* OpenAL functions */
 ''')
@@ -124,6 +130,14 @@ ALWalproc alwGetProcAddr(const char *proc);
         f.write('extern {0[p_t]: <52} {0[p_s]};\n'.format(proc_t(proc)).encode("utf-8"))
     f.write(b'\n')
     for proc in procs:
+        f.write('#define {0[p]: <45} {0[p_s]}\n'.format(proc_t(proc)).encode("utf-8"))
+    f.write(br'''
+/* Effects extension functions */
+''')
+    for proc in efxProcs:
+        f.write('extern {0[p_t]: <52} {0[p_s]};\n'.format(proc_t(proc)).encode("utf-8"))
+    f.write(b'\n')
+    for proc in efxProcs:
         f.write('#define {0[p]: <45} {0[p_s]}\n'.format(proc_t(proc)).encode("utf-8"))
     f.write(br'''
 #ifdef __cplusplus
@@ -223,18 +237,27 @@ int alwInit(void)
 	return res ? 0 : -1;
 }
 
+static void load_efx_procs(void);
+
+int alwInitEfx(void)
+{
+	if (!libal) return -1;
+	load_efx_procs();
+	return 0;
+}
+
 void alwTerminate(void)
 {
 	close_libal();
 }
 
-ALWalproc alwGetProcAddr(const char *proc)
-{
-	return get_proc(proc);
-}
-
 ''')
     for proc in procs:
+        f.write('{0[p_t]: <52} {0[p_s]};\n'.format(proc_t(proc)).encode("utf-8"))
+    f.write(br'''
+/* EFX entry points */
+''')
+    for proc in efxProcs:
         f.write('{0[p_t]: <52} {0[p_s]};\n'.format(proc_t(proc)).encode("utf-8"))
     f.write(br'''
 static void load_procs(void)
@@ -242,4 +265,11 @@ static void load_procs(void)
 ''')
     for proc in procs:
         f.write('\t{0[p_s]} = ({0[p_t]}) get_proc("{0[p]}");\n'.format(proc_t(proc)).encode("utf-8"))
+    f.write(br'''}
+
+static void load_efx_procs(void)
+{
+''')
+    for proc in efxProcs:
+        f.write('\t{0[p_s]} = ({0[p_t]}) alwGetProcAddress("{0[p]}");\n'.format(proc_t(proc)).encode("utf-8"))
     f.write(b'}\n')
