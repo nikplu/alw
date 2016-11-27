@@ -31,6 +31,7 @@ from __future__ import print_function
 
 import re
 import os
+import argparse
 
 # UNLICENSE copyright header
 UNLICENSE = br'''/*
@@ -66,6 +67,15 @@ UNLICENSE = br'''/*
 */
 
 '''
+
+output_dir = ""
+
+argparser = argparse.ArgumentParser()
+argparser.add_argument("--destdir", help="Path to the directory where the outputs should be written to")
+args = argparser.parse_args()
+
+if args.destdir:
+    output_dir = args.destdir
 
 # Create directories
 if not os.path.exists('include/AL'):
@@ -103,7 +113,7 @@ def proc_t(proc):
 
 # Generate alw.h
 print('Generating alw.h in include/AL...')
-with open('include/AL/alw.h', 'wb') as f:
+with open(os.path.join(output_dir, 'include/AL/alw.h'), 'wb') as f:
     f.write(UNLICENSE)
     f.write(br'''#ifndef __alw_h_
 #define __alw_h_
@@ -149,7 +159,7 @@ void alwTerminate(void);
 
 # Generate alw.c
 print('Generating alw.c in src...')
-with open('src/alw.c', 'wb') as f:
+with open(os.path.join(output_dir, 'src/alw.c'), 'wb') as f:
     f.write(UNLICENSE)
     f.write(br'''#include <AL/alw.h>
 
