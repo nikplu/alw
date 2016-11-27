@@ -2,9 +2,8 @@ cmake_minimum_required(VERSION 2.8)
 
 project(alw)
 
-include_directories(include)
-
 add_library(alw STATIC src/alw.c)
+target_include_directories(alw PUBLIC include)
 
 if (UNIX)
   target_link_libraries(alw PUBLIC dl)
