@@ -217,6 +217,7 @@ static void *get_proc(const char *proc)
 	return res;
 }
 #else
+#include <stddef.h>
 #include <dlfcn.h>
 
 static void *libal;
