@@ -78,10 +78,12 @@ if args.destdir:
     output_dir = args.destdir
 
 # Create directories
-if not os.path.exists('include/AL'):
-    os.makedirs('include/AL')
-if not os.path.exists('src'):
-    os.makedirs('src')
+include_output_dir = os.path.join(output_dir, 'include', 'AL')
+src_output_dir = os.path.join(output_dir, 'src')
+if not os.path.exists(include_output_dir):
+    os.makedirs(include_output_dir)
+if not os.path.exists(src_output_dir):
+    os.makedirs(src_output_dir)
 
 # Parse function names from alc.h, al.h and efx.h
 procs = []
@@ -113,7 +115,7 @@ def proc_t(proc):
 
 # Generate alw.h
 print('Generating alw.h in include/AL...')
-with open(os.path.join(output_dir, 'include/AL/alw.h'), 'wb') as f:
+with open(os.path.join(include_output_dir, 'alw.h'), 'wb') as f:
     f.write(UNLICENSE)
     f.write(br'''#ifndef __alw_h_
 #define __alw_h_
@@ -159,7 +161,7 @@ void alwTerminate(void);
 
 # Generate alw.c
 print('Generating alw.c in src...')
-with open(os.path.join(output_dir, 'src/alw.c'), 'wb') as f:
+with open(os.path.join(src_output_dir, 'alw.c'), 'wb') as f:
     f.write(UNLICENSE)
     f.write(br'''#include <AL/alw.h>
 
